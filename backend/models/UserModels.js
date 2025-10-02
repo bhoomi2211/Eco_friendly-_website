@@ -1,12 +1,16 @@
-const {Schema,model } = require('../connection');
+// models/UserModels.js
+const mongoose = require('mongoose');
 
-const mySchema = new Schema({
-    name:String,
-    email:{type:String,required:true, unique:true },
-    city: {type:String, default:"unknown" },
-    password:{type:String,required:true },
-    createdAt:{type:Date,default:Date.now},
-
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+  city: String,
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  }
 });
 
- module.exports=model('users',mySchema);
+module.exports = mongoose.model('user', userSchema);

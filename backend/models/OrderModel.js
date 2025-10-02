@@ -1,14 +1,26 @@
-const {Schema, model} = require('../connection');
-const ordrerSchema = new Schema({
-    userId: { type: Schema.Types.ObjectId, ref: 'users', required: true },
-    items: [
-        {
-            productId: { type: Schema.Types.ObjectId, ref: 'product', required: true },
-            quantity: { type: Number, required: true, min: 1 }
-        }
-    ],  
-    totalAmount: { type: Number, required: true },
-    status: { type: String, enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'], default: 'Pending' },
-    createdAt: { type: Date, default: Date.now }
+const { Schema, model } = require('../connection');
+
+const orderSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'user', required: true },
+
+  items: [
+    {
+      productId: { type: Schema.Types.ObjectId, ref: 'products', required: true },
+      quantity: { type: Number, required: true, min: 1 }
+    }
+  ],
+
+  totalAmount: { type: Number, required: true },
+
+  // ✅ Added "Paid" in status options
+  status: { 
+    type: String, 
+    enum: ['Pending', 'Paid', 'Shipped', 'Delivered', 'Cancelled'], 
+    default: 'Pending' 
+  },
+
+  createdAt: { type: Date, default: Date.now }
 });
-module.exports = model('orders', ordrerSchema);
+
+// ✅ Export model
+module.exports = model('orders', orderSchema);

@@ -102,34 +102,34 @@ router.put('/update/:id', (req, res) => {
 // Removed duplicate and placeholder routes for /getbyid, /delete, and /update to prevent conflicts.
 
 router.post('/authenticate', (req, res) => {
-    const { email, password } = req.body;
-    Model.findOne({ email, password })
-        .then((result) => {
-            if (result) {
-                const { _id, name, email } = result;
+  const { email, password } = req.body;
+  Model.findOne({ email, password })
+    .then((result) => {
+      if (result) {
+        const { _id, name, email, role } = result;
 
-                jwt.sign(
-                    { _id, name },
-                    process.env.JWT_SECRET,
-                    { expiresIn: '1h' },
-                    (err, token) => {
-                        if (err) {
-                            res.status(500).json(err);
-                        } else {
-                            res.status(200).json({
-                                token,
-                                user: { _id, name, email }   // ✅ return safe user data
-                            });
-                        }
-                    }
-                )
+        jwt.sign(
+          { _id, name, role },   // ✅ role add kiya
+          process.env.JWT_SECRET,
+          { expiresIn: '1h' },
+          (err, token) => {
+            if (err) {
+              res.status(500).json(err);
             } else {
-                res.status(401).json({ message: "invalid credentials" });
+              res.status(200).json({
+                token,
+                user: { _id, name, email, role }   // ✅ role return
+              });
             }
-        })
-        .catch((err) => {
-            res.status(500).json(err);
-        });
+          }
+        );
+      } else {
+        res.status(401).json({ message: "invalid credentials" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
 // get profile of logged in user

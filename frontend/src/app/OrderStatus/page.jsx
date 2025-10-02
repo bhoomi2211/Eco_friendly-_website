@@ -17,17 +17,20 @@ export default function MyOrders() {
   useEffect(() => {
     if (!user || !token) return;
 
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+
+    // Normal users fetch their orders, admin can fetch all
+    const url =
+      user.role === "admin"
+        ? "http://localhost:5000/order/getall"
+        : `http://localhost:5000/order/myorders`;
+
     axios
-      .get(`http://localhost:5000/order/getbyuser/${user._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(url, config)
       .then((res) => setOrders(res.data))
       .catch((err) => console.error(err));
   }, [user, token]);
 
-  // Step order for tracking
   const steps = ["Pending", "Paid", "Shipped", "Delivered"];
 
   const getStepIndex = (status) => {
@@ -36,8 +39,27 @@ export default function MyOrders() {
       case "Paid": return 1;
       case "Shipped": return 2;
       case "Delivered": return 3;
-      case "Cancelled": return -1; // special case
+      case "Cancelled": return -1;
       default: return 0;
+    }
+  };
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/order/updatestatus/${orderId}`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setOrders((prevOrders) =>
+        prevOrders.map((o) =>
+          o._id === orderId ? { ...o, status: newStatus } : o
+        )
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update status");
     }
   };
 
@@ -65,15 +87,35 @@ export default function MyOrders() {
                   <h2 className="font-bold text-xl text-gray-800">
                     Order <span className="text-blue-600">#{order._id.slice(-6)}</span>
                   </h2>
-                  <span
-                    className={`px-4 py-1 rounded-full text-sm font-semibold shadow-sm ${
-                      order.status === "Cancelled"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-blue-100 text-blue-800"
-                    }`}
-                  >
-                    {order.status}
-                  </span>
+
+                  {/* Admin Dropdown for status */}
+                  {user.role === "admin" ? (
+                    <select
+                      value={order.status}
+                      onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                      className={`px-4 py-1 rounded-full text-sm font-semibold shadow-sm ${
+                        order.status === "Cancelled"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-blue-100 text-blue-800"
+                      }`}
+                    >
+                      {["Pending", "Paid", "Shipped", "Delivered", "Cancelled"].map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <span
+                      className={`px-4 py-1 rounded-full text-sm font-semibold shadow-sm ${
+                        order.status === "Cancelled"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-blue-100 text-blue-800"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  )}
                 </div>
 
                 {/* Order Details */}
@@ -90,47 +132,6 @@ export default function MyOrders() {
                   </p>
                 </div>
 
-                {/* Order Tracking */}
-                {order.status !== "Cancelled" && (
-                  <div className="mb-8">
-                    <div className="flex justify-between items-center relative">
-                      {steps.map((step, i) => (
-                        <div key={i} className="flex-1 flex flex-col items-center">
-                          <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm
-                              ${
-                                i <= stepIndex
-                                  ? "bg-blue-600 text-white"
-                                  : "bg-gray-300 text-gray-600"
-                              }`}
-                          >
-                            {i + 1}
-                          </div>
-                          <p
-                            className={`mt-2 text-xs font-medium ${
-                              i <= stepIndex ? "text-blue-600" : "text-gray-500"
-                            }`}
-                          >
-                            {step}
-                          </p>
-                          {i < steps.length - 1 && (
-                            <div
-                              className={`absolute top-4 left-[12%] w-[76%] h-1 
-                                ${i < stepIndex ? "bg-blue-600" : "bg-gray-300"}`}
-                            ></div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {order.status === "Cancelled" && (
-                  <p className="text-red-600 font-semibold text-center mb-8">
-                    ❌ This order was cancelled
-                  </p>
-                )}
-
                 {/* Items List */}
                 {order.items && order.items.length > 0 && (
                   <div>
@@ -146,7 +147,6 @@ export default function MyOrders() {
                         >
                           {/* Product Info */}
                           <div className="flex items-center gap-4">
-                            {/* Product Image */}
                             {item.productId?.image && (
                               <img
                                 src={item.productId.image}
@@ -164,7 +164,6 @@ export default function MyOrders() {
                             </div>
                           </div>
 
-                          {/* Quantity & Subtotal */}
                           <div className="text-right">
                             <p className="text-gray-600 font-medium">Qty: {item.quantity}</p>
                             <p className="text-gray-800 font-semibold">
