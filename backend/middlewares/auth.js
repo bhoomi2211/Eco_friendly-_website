@@ -1,31 +1,30 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/UserModels');
 require('dotenv').config();
 
-// Middleware to verify JWT token
-const verifyToken = (req, res, next) => {
-    // Get token from header
+// Middleware to verify JWT token and role
+const verifyToken = async (req, res, next) => {
+  try {
     const token = req.headers.authorization?.split(' ')[1];
-    console.log(token);
-    
     if (!token) {
-        return res.status(401).json({ 
-            message: 'Access denied. No token provided.' 
-        });
+      return res.status(401).json({ message: 'Access denied. No token provided.' });
     }
 
-    try {
-        // Verify token using secret key
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        
-        // Add user data from token to request object
-        req.user = decoded;
-        next();
-    } catch (error) {
-        return res.status(403).json({ 
-            message: 'Invalid token.' 
-        });
+    // Verify token using secret key
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Find user in DB to confirm existence and role
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      return res.status(401).json({ message: 'User not found.' });
     }
+
+    req.user = user; // attach full user object to request
+    next();
+  } catch (error) {
+    console.error('Auth error:', error.message);
+    return res.status(403).json({ message: 'Invalid or expired token.' });
+  }
 };
 
 module.exports = verifyToken;

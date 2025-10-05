@@ -18,7 +18,7 @@ const HomePage = () => {
       <Categories />
       <FeaturedProducts />
       <AboutPage/>
-      <Footer />
+      
     </div>
   );
 };

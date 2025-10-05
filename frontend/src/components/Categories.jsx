@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import Link from "next/link"; // If using Next.js for SPA navigation
+import Link from "next/link";
 
 const categories = [
   { id: 1, name: "Electronics", image: "https://www.matric.com/hubfs/classes%20of%20electronics.jpg" },
@@ -10,22 +10,23 @@ const categories = [
   { id: 4, name: "Footwear", image: "https://www.jack-wolfskin.com/on/demandware.static/-/Library-Sites-JackWolfskin_SharedContentLib/default/dw9e622e9b/landingpages/20250821Footwear/img/Hover_4.jpg" },
   { id: 5, name: "Fashion", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0td7EPeP2WX6Rby-Dfv60GpLa20eQKiP7-g&s" },
   { id: 6, name: "Sports & Fitness", image: "https://img1.wsimg.com/isteam/getty/496707717/:/cr=t:0%25,l:16.66%25,w:66.68%25,h:100%25" },
-  { id: 7, name: "Books & Media" , image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgRuquGJtalZ8BXwKUGf3JGVOKfMltJ7gF6w&s" },
+  { id: 7, name: "Books & Media", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgRuquGJtalZ8BXwKUGf3JGVOKfMltJ7gF6w&s" },
   { id: 8, name: "Beauty & Care", image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmVhdXR5JTIwcHJvZHVjdHN8ZW58MHx8MHx8fDA%3D" },
 ];
 
 const Categories = () => {
   return (
-    <section className="relative min-h-screen bg-gray-100 flex flex-col items-center justify-center px-6 py-24">
-      {/* Decorative background blur waves */}
+    <section className="relative min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-28">
+      
+      {/* Decorative Background */}
       <div className="absolute inset-0">
-        <div className="absolute bottom-0 left-0 right-0 h-52 bg-gray-200 opacity-20 rounded-t-full blur-3xl"></div>
-        <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 w-[95%] h-44 bg-gray-300 opacity-10 blur-3xl rounded-full"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-40 sm:h-52 bg-gray-200 opacity-20 rounded-t-full blur-3xl"></div>
+        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 w-[95%] h-32 sm:h-44 bg-gray-300 opacity-10 blur-3xl rounded-full"></div>
       </div>
 
       {/* Section Title */}
       <motion.h3
-        className="relative z-10 text-4xl md:text-5xl font-bold text-gray-800 mb-12 text-center"
+        className="relative z-10 text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-10 sm:mb-12 text-center"
         initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -35,7 +36,7 @@ const Categories = () => {
 
       {/* Categories Card Container */}
       <motion.div
-        className="relative z-10 w-full max-w-7xl p-12 grid md:grid-cols-4 gap-8"
+        className="relative z-10 w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 px-2 sm:px-6"
         initial={{ y: 60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -43,12 +44,12 @@ const Categories = () => {
         {categories.map((cat) => (
           <motion.div
             key={cat.id}
-            className="flex flex-col items-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-2xl hover:scale-105 transition-transform duration-300 cursor-pointer"
+            className="flex flex-col items-center p-5 sm:p-6 bg-white rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
             whileHover={{ y: -5 }}
           >
             <Link href={`/categories/${cat.name.toLowerCase()}`} className="w-full">
               {/* Category Image */}
-              <div className="w-full h-40 mb-4 overflow-hidden rounded-2xl">
+              <div className="w-full h-36 sm:h-40 lg:h-48 mb-4 overflow-hidden rounded-xl">
                 <img
                   src={cat.image}
                   alt={cat.name}
@@ -56,7 +57,9 @@ const Categories = () => {
                 />
               </div>
               {/* Category Title */}
-              <h3 className="text-xl font-semibold text-gray-800 text-center">{cat.name}</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 text-center">
+                {cat.name}
+              </h3>
             </Link>
           </motion.div>
         ))}
