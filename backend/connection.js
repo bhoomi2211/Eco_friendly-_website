@@ -1,17 +1,15 @@
-const { log } = require('console');
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-const url = "mongodb+srv://bhoomi1812:1812@cluster0.uzh1ckn.mongodb.net/eco-friendly?retryWrites=true&w=majority&appName=Cluster0"
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("Database connected successfully");
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-mongoose.connect(url)
-    .then((result) => {
-        console.log("Database connected successfully");
-
-
-    }).catch((err) => {
-        console.log(err);
-
-
-    });
+connectDB();
 
 module.exports = mongoose;
