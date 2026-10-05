@@ -3,6 +3,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
+import API_URL from "@/config";
 
 // ✅ Validation schema
 const SignupSchema = Yup.object().shape({
@@ -21,7 +22,7 @@ const Signup = () => {
     initialValues: { name: "", email: "", password: "", confirmPassword: "" },
     onSubmit: (values, { resetForm }) => {
       axios
-        .post("http://localhost:5000/user/add", values)
+        .post(`${API_URL}/user/add`, values)
         .then(() => {
           toast.success("User registered successfully 🎉");
           resetForm();

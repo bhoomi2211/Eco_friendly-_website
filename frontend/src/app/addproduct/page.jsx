@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import API_URL from '@/config';
 
 const AddProduct = () => {
   const router = useRouter();
@@ -46,7 +47,7 @@ const AddProduct = () => {
     onSubmit: (values, { resetForm }) => {
       const token = localStorage.getItem('token');
       axios
-        .post('http://localhost:5000/product/add', values, {
+        .post(`${API_URL}/product/add`, values, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {

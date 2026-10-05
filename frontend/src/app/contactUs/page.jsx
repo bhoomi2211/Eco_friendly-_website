@@ -3,7 +3,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import React from "react";
 import toast from "react-hot-toast";
-
+import API_URL from "@/config";
 export default function Contact() {
 
   const ContactForm = useFormik({
@@ -13,7 +13,7 @@ export default function Contact() {
   },
   onSubmit: (values) => {
     console.log(values);
-    axios.post('http://localhost:5000/contact/add', values)
+    axios.post(`${API_URL}/contact/add`, values)
     .then((result) => {
       toast.success("Message Sent Successfully");
       console.log(result.data);

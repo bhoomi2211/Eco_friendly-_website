@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
+import API_URL from "@/config";
 export default function LoginPage() {
   const router = useRouter();
 
@@ -16,7 +16,7 @@ export default function LoginPage() {
 
     onSubmit: (values) => {
       axios
-        .post("http://localhost:5000/user/authenticate", values)
+        .post(`${API_URL}/user/authenticate`, values)
         .then((result) => {
           toast.success("Login Successful");
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import React from "react";
 import { toast } from "react-hot-toast";
+import API_URL from "@/config";
 
 const AddToCart = () => {
   const { cartItems, updateQuantity, removeFromCart, clearCart } = UseCartContext();
@@ -26,7 +27,7 @@ const AddToCart = () => {
       return;
     }
     axios
-      .post("http://localhost:5000/order/add", {
+      .post(`${API_URL}/order/add`, {
         // userId: user.user_id|| user._id, // or user._id, as per your user object
         items: cartItems.map((item) => ({
           productId: item._id,

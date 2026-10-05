@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API_URL from "@/config";
 
 export default function MyOrders() {
   const [orders, setOrders] = useState([]);
@@ -22,8 +23,8 @@ export default function MyOrders() {
     // Normal users fetch their orders, admin can fetch all
     const url =
       user.role === "admin"
-        ? "http://localhost:5000/order/getall"
-        : `http://localhost:5000/order/myorders`;
+        ? `${API_URL}/order/getall`
+        : `${API_URL}/order/myorders`;
 
     axios
       .get(url, config)
@@ -47,7 +48,7 @@ export default function MyOrders() {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       await axios.put(
-        `http://localhost:5000/order/updatestatus/${orderId}`,
+        `${API_URL}/order/updatestatus/${orderId}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

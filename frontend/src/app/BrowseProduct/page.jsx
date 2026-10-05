@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Heart, Search, Filter } from "lucide-react";
 import Link from "next/link";
 import UseWishlistContext from "@/context/WishlistContext";
+import API_URL from "@/config";
 
 const BrowseProduct = () => {
   const [products, setProducts] = useState([]);
@@ -13,7 +14,7 @@ const BrowseProduct = () => {
   const {  addToWishlist } = UseWishlistContext();
 
   const fetchProducts = async () => {
-    const res = await axios.get("http://localhost:5000/product/getall");
+    const res = await axios.get(`${API_URL}/product/getall`);
     setProducts(res.data);
   };
 

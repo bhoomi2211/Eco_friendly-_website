@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import API_URL from "@/config";
 
 const Profile = () => {
   const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) : null;
@@ -12,7 +13,7 @@ const Profile = () => {
   useEffect(() => {
     if (!user) return;
     axios
-      .get(`http://localhost:5000/user/profile`, {
+      .get(`${API_URL}/user/profile`, {
         headers: { Authorization: `Bearer ${user?.token}` },
       })
       .then((res) => {
@@ -33,7 +34,7 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/user/update/${userData._id}`, formData);
+      await axios.put(`${API_URL}/user/update/${userData._id}`, formData);
       setUserData({ ...userData, ...formData });
       setIsEditing(false);
       toast.success("Profile updated successfully!");

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Heart } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import API_URL from "@/config";
 
 const ViewProductDetails = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ const ViewProductDetails = () => {
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:5000/product/getbyid/${id}`)
+      axios.get(`${API_URL}/product/getbyid/${id}`)
         .then((result) => {
           console.log(result.data);
           setproduct(result.data);
