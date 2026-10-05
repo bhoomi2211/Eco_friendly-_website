@@ -1,7 +1,7 @@
 const express = require('express');
 const Model = require('../models/OrderModel');
 const verifyToken = require('../middlewares/auth');
-const isAdmin = require('../middlewares/isadmin');
+const isAdmin = require('../middlewares/isAdmin');
 const router = express.Router();
 
 // Add new order (user)
