@@ -52,7 +52,7 @@ const Navbar = () => {
           <a href="/BrowseProduct" className="hover:text-blue-400 transition">Products</a>
           <a href="/categories" className="hover:text-blue-400 transition">Categories</a>
           {user?.role === "admin" && (
-            <a href="/add-product" className="hover:text-blue-400 transition">Add Product</a>
+            <a href="/addproduct" className="hover:text-blue-400 transition">Add Product</a>
           )}
           <a href="/aboutUs" className="hover:text-blue-400 transition">About</a>
           <a href="/contact" className="hover:text-blue-400 transition">Contact</a>

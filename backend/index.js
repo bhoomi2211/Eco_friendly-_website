@@ -8,9 +8,10 @@ const mongoose=require('./connection');
 const dotenv = require('dotenv').config();
 
 
+
 const cors=require('cors');
 
-
+ 
 
 const port = 5000;
 
@@ -63,4 +64,4 @@ app.get('/delete',(req ,res)=>{
 
 app.listen(port, () => {
     console.log("Server started");
-});
+}); 

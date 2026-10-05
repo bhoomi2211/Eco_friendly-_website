@@ -20,6 +20,7 @@ const HomePage = () => {
       <AboutPage/>
       
     </div>
+    
   );
 };
 
